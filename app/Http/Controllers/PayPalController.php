@@ -87,7 +87,7 @@ class PayPalController extends Controller
             } else {
                 // Perform transaction on PayPal
                 $payment_status = $this->provider->doExpressCheckoutPayment($cart, $token, $PayerID);
-                $status = $payment_status['PAYMENTINFO_0_PAYMENTSTATUS'];
+                $status = $payment_status['ACK'];
             }
 
             $invoice = $this->createInvoice($cart, $status);
@@ -223,7 +223,7 @@ class PayPalController extends Controller
         $invoice = new Invoice();
         $invoice->title = $cart['invoice_description'];
         $invoice->price = $cart['total'];
-        if (!strcasecmp($status, 'Completed') || !strcasecmp($status, 'Processed')) {
+        if (!strcasecmp($status, 'Success')) {
             $invoice->paid = 1;
         } else {
             $invoice->paid = 0;
